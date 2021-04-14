@@ -15,7 +15,7 @@ public class ProductBasicDetails {
     private long id;
 
     @Column(name = "short_description", nullable = false)
-    private String shortDescripion;
+    private String shortDescription;
 
     @Column(name = "logo_image")
     @Lob
