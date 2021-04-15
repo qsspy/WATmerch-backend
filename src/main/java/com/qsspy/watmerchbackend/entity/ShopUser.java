@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @Data
-public class User {
+public class ShopUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class User {
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_details_id", referencedColumnName = "id")
-    private UserDetails userDetails;
+    private ShopUserDetails userDetails;
 
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")

@@ -1,7 +1,7 @@
 package com.qsspy.watmerchbackend.controller;
 
 import com.qsspy.watmerchbackend.entity.Role;
-import com.qsspy.watmerchbackend.entity.User;
+import com.qsspy.watmerchbackend.entity.ShopUser;
 import com.qsspy.watmerchbackend.service.IUserService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class UserController {
 
     //Pobiera listę użytkowników
     @GetMapping("/users")
-    public Page<User> getUsers(
+    public Page<ShopUser> getUsers(
             @RequestParam(defaultValue = "0") int page, // numer strony 0-indexed
             @RequestParam(defaultValue = "20") int size, // wielkość strony
             @RequestParam(defaultValue = "false") Boolean detailed,
@@ -31,7 +31,7 @@ public class UserController {
 
     //Zapisuje nowego użytkownika (register)
     @PostMapping("/users")
-    public User postUser(@RequestBody User user) {
+    public ShopUser postUser(@RequestBody ShopUser user) {
 
         return userService.postUser(user);
     }

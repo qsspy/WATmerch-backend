@@ -1,7 +1,9 @@
 package com.qsspy.watmerchbackend.repository;
 
-import com.qsspy.watmerchbackend.entity.User;
+import com.qsspy.watmerchbackend.entity.ShopUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<ShopUser, Long> {
+
+    ShopUser findByUsername(String username);
 }
