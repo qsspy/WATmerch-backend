@@ -19,7 +19,7 @@ public class ProductBasicDetails {
 
     @Column(name = "logo_image")
     @Lob
-    private Byte[] logoImage;
+    private byte[] logoImage;
 
     @Column(name = "discount_percent")
     private float discountPercent;

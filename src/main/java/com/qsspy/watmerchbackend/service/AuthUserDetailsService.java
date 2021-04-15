@@ -20,6 +20,8 @@ public class AuthUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
+        System.out.println("Checking user");
+
         ShopUser user = userRepository.findByUsername(s);
 
         if(user == null) {

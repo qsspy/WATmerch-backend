@@ -35,5 +35,5 @@ public class ShopUserDetails {
 
     @Column(name = "avatar")
     @Lob
-    private Byte[] avatar;
+    private byte[] avatar;
 }

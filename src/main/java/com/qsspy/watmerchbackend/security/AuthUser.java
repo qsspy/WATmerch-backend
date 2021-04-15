@@ -13,6 +13,7 @@ public class AuthUser implements UserDetails {
     private ShopUser shopUser;
 
     public AuthUser(ShopUser shopUser) {
+
         this.shopUser = shopUser;
     }
 
