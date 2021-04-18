@@ -1,6 +1,7 @@
 package com.qsspy.watmerchbackend;
 
 import com.qsspy.watmerchbackend.entity.*;
+import com.qsspy.watmerchbackend.exception.register.RegisterException;
 import com.qsspy.watmerchbackend.service.ProductService;
 import com.qsspy.watmerchbackend.service.UserService;
 import org.springframework.boot.SpringApplication;
@@ -18,14 +19,14 @@ public class WatmerchBackendApplication {
 
 	private static final Logger LOGGER = Logger.getLogger(WatmerchBackendApplication.class.getName());
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, RegisterException {
 
 		ApplicationContext app = SpringApplication.run(WatmerchBackendApplication.class, args);
 
 		initializeData(app);
 	}
 
-	private static void initializeData(ApplicationContext app) throws IOException {
+	private static void initializeData(ApplicationContext app) throws IOException, RegisterException {
 
 		//init usersg
 
@@ -132,7 +133,7 @@ public class WatmerchBackendApplication {
 		}
 	}
 
-	private static void initAdmin(UserService userService) throws IOException {
+	private static void initAdmin(UserService userService) throws IOException, RegisterException {
 
 		Address shippingAddress = new Address();
 		shippingAddress.setFirstName("Krystyna");
@@ -178,10 +179,10 @@ public class WatmerchBackendApplication {
 		user.setUserDetails(details);
 		user.setRole(role);
 
-		userService.postUser(user);
+		userService.register(user);
 	}
 
-	private static void initEmployee(UserService userService) throws IOException {
+	private static void initEmployee(UserService userService) throws IOException, RegisterException {
 
 		Address shippingAddress = new Address();
 		shippingAddress.setFirstName("Krzysztof");
@@ -227,10 +228,10 @@ public class WatmerchBackendApplication {
 		user.setUserDetails(details);
 		user.setRole(role);
 
-		userService.postUser(user);
+		userService.register(user);
 	}
 
-	private static void initUser(UserService userService) throws IOException {
+	private static void initUser(UserService userService) throws IOException, RegisterException {
 
 		Address shippingAddress = new Address();
 		shippingAddress.setFirstName("Adam");
@@ -276,6 +277,6 @@ public class WatmerchBackendApplication {
 		user.setUserDetails(details);
 		user.setRole(role);
 
-		userService.postUser(user);
+		userService.register(user);
 	}
 }

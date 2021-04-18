@@ -11,7 +11,7 @@ public interface IProductService {
     List<Category> getCategories();
     Category postCategory(Category category);
 
-    Page<Product> getProducts(int page, int size, Integer categoryId, Boolean extended, Boolean detailed);
+    Page<Product> getProducts(int page, int size, Integer categoryId, Boolean extended, Boolean detailed, String namePart);
     Product getProduct(String barcode);
     Product postProduct(Product product);
 

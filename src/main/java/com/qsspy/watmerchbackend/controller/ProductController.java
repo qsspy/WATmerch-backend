@@ -39,9 +39,17 @@ public class ProductController {
             @RequestParam(defaultValue = "20") int size, // wielkość strony
             @RequestParam(name = "category", required = false) Integer categoryId, //id kategorii
             @RequestParam(defaultValue = "false") Boolean extended,
-            @RequestParam(defaultValue = "false") Boolean detailed
+            @RequestParam(defaultValue = "false") Boolean detailed,
+            @RequestParam(name = "contains", defaultValue = "") String namePart
     ) {
-        return productService.getProducts(page, size, categoryId, extended, detailed);
+        return productService.getProducts(page, size, categoryId, extended, detailed, namePart);
+    }
+
+    @GetMapping("/products/{barcode}")
+    public Product getProduct(
+            @PathVariable String barcode
+    ) {
+        return productService.getProduct(barcode);
     }
 
     //Zapisuje nowy produkt

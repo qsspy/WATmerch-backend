@@ -35,15 +35,15 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Page<Product> getProducts(int page, int size, Integer categoryId, Boolean extended, Boolean detailed) {
+    public Page<Product> getProducts(int page, int size, Integer categoryId, Boolean extended, Boolean detailed, String namePart) {
 
         Sort sort = Sort.by(Sort.Direction.ASC, "name");
         Pageable pageable = PageRequest.of(page,size,sort);
         Page<Product> productPage;
         if(categoryId == null) {
-            productPage = productRepository.findAll(pageable);
+            productPage = productRepository.findByNameContaining(namePart, pageable);
         } else {
-            productPage = productRepository.findByCategoryId(categoryId, pageable);
+            productPage = productRepository.findByCategoryIdAndNameContaining(categoryId, namePart, pageable);
         }
         for(Product product : productPage.getContent()) {
             if(!extended) {

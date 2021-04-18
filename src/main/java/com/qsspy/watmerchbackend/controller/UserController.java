@@ -5,6 +5,7 @@ import com.qsspy.watmerchbackend.entity.Role;
 import com.qsspy.watmerchbackend.entity.ShopUser;
 import com.qsspy.watmerchbackend.exception.login.UserNotFoundException;
 import com.qsspy.watmerchbackend.exception.login.WrongPasswordException;
+import com.qsspy.watmerchbackend.exception.register.RegisterException;
 import com.qsspy.watmerchbackend.model.UserAndPasswordModel;
 import com.qsspy.watmerchbackend.service.IUserService;
 import org.springframework.data.domain.Page;
@@ -34,10 +35,10 @@ public class UserController {
     }
 
     //Zapisuje nowego użytkownika (register)
-    @PostMapping("/users")
-    public ShopUser register(@RequestBody ShopUser user) {
+    @PostMapping("/register")
+    public ShopUser register(@RequestBody ShopUser user) throws RegisterException {
 
-        return userService.postUser(user);
+        return userService.register(user);
     }
 
     //Zwraca dane uzytkownika, jeżeli podano poprawne dane logowanie

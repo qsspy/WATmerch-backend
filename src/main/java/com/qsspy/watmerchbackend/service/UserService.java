@@ -4,6 +4,9 @@ import com.qsspy.watmerchbackend.entity.Role;
 import com.qsspy.watmerchbackend.entity.ShopUser;
 import com.qsspy.watmerchbackend.exception.login.UserNotFoundException;
 import com.qsspy.watmerchbackend.exception.login.WrongPasswordException;
+import com.qsspy.watmerchbackend.exception.register.EmailNotAvailableException;
+import com.qsspy.watmerchbackend.exception.register.RegisterException;
+import com.qsspy.watmerchbackend.exception.register.UserExistsException;
 import com.qsspy.watmerchbackend.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +36,15 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public ShopUser postUser(ShopUser user) {
+    public ShopUser register(ShopUser user) throws RegisterException{
+
+        if(userRepository.findByUsername(user.getUsername()) != null) {
+            throw new UserExistsException("User " + user.getUsername() + " already exists!");
+        }
+        if(userRepository.findByEmail(user.getEmail()) != null) {
+            throw new EmailNotAvailableException("E-mail " + user.getEmail() + " is already taken!");
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
