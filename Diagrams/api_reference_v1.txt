@@ -1,0 +1,177 @@
+======================================
+WATmerch API documentation v1
+======================================
+======================================
+Security:
+
+Obecnie dostęp do endpointow (oprocz logowania i rejestracji) maja tylko zarejestrowani uzytkownicy.
+Aby uzyskać dostęp do endointu nalezy w żądaniu zalaczyc naglowek :
+"Authorization":"Basic (<username>:<password>)", a tekst w okraglych nawiasach zaszyfrowac algorytmem base64 np:
+"Authorization":"Basic user:user" --> "Authorization":"Basic dXNlcjp1c2Vy" i takie cos trzeba zalaczyc
+
+Każde ządanie (oprocz logowania i rejestracji) zwraca naglówek:
+"Cookie":"JSESSIONID=<jakis token>"
+Warto go zalaczyc razem z "Authorization", bo wtedy spring sprawdza cookie zamiast credentiali i nie pobiera danych z bazy (optymalizacja).
+Token moze sie zmienic w czasie dlatego mozna aktualizowac token po kazdej odpowiedzi serwera.
+Z samym "Authorization" tez bedzie dzialac.
+
+W bazie domyslnie znajduja sie 3 uzytkownicy do testowania :
+
+1.
+
+username : user
+password : user
+role : ROLE_USER
+
+2.
+
+username : employee
+password : employee
+role : ROLE_EMPLOYEE
+
+3.
+
+username : admin
+password : admin
+role : ROLE_ADMIN
+======================================
+
+
+
+	1. Pobranie listy kategorii
+
+Żądanie : GET /api/categories
+
+Parametry : brak
+
+	2. Dodanie nowej kategorii
+
+Żądanie : POST /api/categories
+
+Parametry : brak
+
+Przykładowe ciało : 
+
+{
+	"name":"Koszule"
+}
+
+	3. Pobranie listy produktów ze stronicowaniem
+
+Żądanie : GET /api/products
+
+Parametry :
+	- page - numer strony (indexowane od 0) (domyslnie 0)
+	- size - wielkość strony (domyslnie 20)
+	- category - id kategorii (opcjonalne)
+	- extended - true/false - dolaczane sa dodatkowe dane o produkcie ( domyslnie false )
+	- detailed - true/false - dolaczane sa kolejne dodatkowe dane o produkcie ( domyslnie false )
+	- contains - ciag zankow, ktory musi zawierac sie w nazwie produktu (opcjonalne)
+	
+	4. Pobranie pojedynczego produktu
+	
+Żądanie : GET /api/products/<barcode>
+
+Parametry : brak
+	
+	5. Dodanie nowego produktu lub jego edycja, gdy podamy juz istniejacy kod kreskowy, (barcode=id)
+
+Żądanie : POST /api/products
+
+Parametry: brak
+
+Przykladowe ciało:
+
+{
+    "barcode":"1415",
+    "name":"test name",
+    "price":"2.20",
+    "vat":"0.30",
+    "category": {
+        "id":"2"
+    },
+    "basicDetails": {
+        "shortDescription":"elo",
+        "discountPercent":"0.2",
+        "logoImage":"abcv"
+    },
+    "details": {
+        "longDescription":"siema",
+        "quantityInStock":"9"
+    }
+}
+
+	6. Pobranie danych użytkownika ( może posłużyć do logowania )
+
+Żądanie : POST /api/loginUser
+
+Parametry : brak
+
+Przykładowe cialo :
+
+{
+    "username":"admin",
+    "password":"admin"
+}
+
+Gdy haslo/login sa nieprawidlode zwracane jest cialo wyjatku, np:
+
+{
+    "statusCode": 406,
+    "message": "NOT_ACCEPTABLE",
+    "details": "Invalid password."
+}
+
+	7. Rejstracja użytkownika
+
+Żądanie : POST /api/register
+
+Parametry : brak
+
+Przykładowe cialo :
+
+{
+    "username":"passtest3",
+    "password":"marik",
+    "email":"user69@user.com",
+    "enabled":"true",
+    "role": {
+        "id":"1" // 1 - user, 2 - employee, 3 - admin
+    },
+    "userDetails" : {
+        "firstName":"marik",
+        "lastName":"marikovsky",
+        "phoneNumber":"123123123",
+        "birthDate":"2012-04-23T18:25:43.511Z",
+        "company":"niggers",
+        "nip":"123123123",
+        "avatar":[12,12,32]
+    },
+    "shippingAddress":{
+        "firstName":"Marik",
+        "lastName":"marikovsky",
+        "street":"ul. Radosława 20",
+        "postalCode":"08-550",
+        "city":"Radomsko",
+        "country":"PL",
+        "phoneNumber":"123123123"
+    },
+    "billingAddress": {
+        "firstName":"Marik",
+        "lastName":"marikovsky",
+        "street":"ul. Radosława 20",
+        "postalCode":"08-550",
+        "city":"Radomsko",
+        "country":"PL",
+        "phoneNumber":"123123123",
+        "state":"Radomskye"
+    }
+}
+
+Gdy uzytkownik/email istnieje zwracane jest cialo wyjatku, np:
+
+{
+    "statusCode": 406,
+    "message": "NOT_ACCEPTABLE",
+    "details": "E-mail user69@user.com is already taken!"
+}
