@@ -1,5 +1,6 @@
 package com.qsspy.watmerchbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,9 +21,5 @@ public class OrderProduct {
     @ManyToOne
     @JoinColumn(name = "product_barcode", referencedColumnName = "barcode")
     private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "purchase_id", referencedColumnName = "id")
-    private Purchase purchase;
 
 }

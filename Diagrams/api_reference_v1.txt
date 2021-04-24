@@ -40,11 +40,15 @@ role : ROLE_ADMIN
 
 	1. Pobranie listy kategorii
 
+Dostęp : Wszyscy
+
 Żądanie : GET /api/categories
 
 Parametry : brak
 
 	2. Dodanie nowej kategorii
+
+Dostęp : Zalogowany
 
 Żądanie : POST /api/categories
 
@@ -58,6 +62,8 @@ Przykładowe ciało :
 
 	3. Pobranie listy produktów ze stronicowaniem
 
+Dostęp : Wszyscy
+
 Żądanie : GET /api/products
 
 Parametry :
@@ -69,12 +75,16 @@ Parametry :
 	- contains - ciag zankow, ktory musi zawierac sie w nazwie produktu (opcjonalne)
 	
 	4. Pobranie pojedynczego produktu
+
+Dostęp : Wszyscy
 	
 Żądanie : GET /api/products/<barcode>
 
 Parametry : brak
 	
 	5. Dodanie nowego produktu lub jego edycja, gdy podamy juz istniejacy kod kreskowy, (barcode=id)
+
+Dostęp : Zalogowany
 
 Żądanie : POST /api/products
 
@@ -103,6 +113,8 @@ Przykladowe ciało:
 
 	6. Pobranie danych użytkownika ( może posłużyć do logowania )
 
+Dostęp : Wszyscy
+
 Żądanie : POST /api/loginUser
 
 Parametry : brak
@@ -123,6 +135,8 @@ Gdy haslo/login sa nieprawidlode zwracane jest cialo wyjatku, np:
 }
 
 	7. Rejstracja użytkownika
+
+Dostęp : Wszyscy
 
 Żądanie : POST /api/register
 
@@ -175,3 +189,73 @@ Gdy uzytkownik/email istnieje zwracane jest cialo wyjatku, np:
     "message": "NOT_ACCEPTABLE",
     "details": "E-mail user69@user.com is already taken!"
 }
+
+    8. Zakup produktów
+
+Dostęp : Wszyscy
+
+Żądanie : POST /api/buy
+
+Parametry : brak
+
+Przykładowe cialo :
+
+{
+    "purchaseDate":"2012-04-23T18:25:43.511Z", //ISO 8601 format
+    "isFinished":"false",
+    "isPaid":"true",
+    "shippingAddress":{
+        "firstName":"Marik",
+        "lastName":"marikovsky",
+        "street":"ul. Radosława 20",
+        "postalCode":"08-550",
+        "city":"Radomsko",
+        "country":"PL",
+        "phoneNumber":"123123123"
+    },
+    "billingAddress": {
+        "firstName":"Marik",
+        "lastName":"marikovsky",
+        "street":"ul. Radosława 20",
+        "postalCode":"08-550",
+        "city":"Radomsko",
+        "country":"PL",
+        "phoneNumber":"123123123",
+        "state":"Radomskye"
+    },
+    "orderProducts": [
+        {
+            "quantity":"5",
+            "product": {
+                "barcode":"1"
+            }
+        },
+        {
+            "quantity":"6",
+            "product": {
+                "barcode":"2"
+            }
+        },
+        {
+            "quantity":"7",
+            "product": {
+                "barcode":"3"
+            }
+        }
+    ]
+}
+
+Jeżeli zostanie podany naglowek "Authorization" zakup bedzie skorelowany z uzytkownikiem,
+w przeciwnym przypadku zakup jest anonimowy
+
+    9. Pobranie listy zakupów użytkownika
+
+Dostęp : Zalogowany
+
+Żądanie : GET /api/purchases
+
+Parametry :
+    - page - numer strony (indexowane od 0) (domyslnie 0)
+	- size - wielkość strony (domyslnie 20)
+
+Wymagane jest podaie nagłowka "Authorization" by zczytac uzytkownika dla ktorego sciaga sie dane
