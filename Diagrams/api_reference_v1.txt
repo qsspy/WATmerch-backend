@@ -9,7 +9,7 @@ Aby uzyskać dostęp do endointu nalezy w żądaniu zalaczyc naglowek :
 "Authorization":"Basic (<username>:<password>)", a tekst w okraglych nawiasach zaszyfrowac algorytmem base64 np:
 "Authorization":"Basic user:user" --> "Authorization":"Basic dXNlcjp1c2Vy" i takie cos trzeba zalaczyc
 
-Każde ządanie (oprocz logowania i rejestracji) zwraca naglówek:
+Każde ządanie (oprocz tych bez wymogu autoryzacji) zwraca naglówek:
 "Cookie":"JSESSIONID=<jakis token>"
 Warto go zalaczyc razem z "Authorization", bo wtedy spring sprawdza cookie zamiast credentiali i nie pobiera danych z bazy (optymalizacja).
 Token moze sie zmienic w czasie dlatego mozna aktualizowac token po kazdej odpowiedzi serwera.
@@ -134,7 +134,7 @@ Gdy haslo/login sa nieprawidlode zwracane jest cialo wyjatku, np:
     "details": "Invalid password."
 }
 
-	7. Rejstracja użytkownika
+	7. Rejestracja użytkownika
 
 Dostęp : Wszyscy
 
@@ -259,3 +259,58 @@ Parametry :
 	- size - wielkość strony (domyslnie 20)
 
 Wymagane jest podaie nagłowka "Authorization" by zczytac uzytkownika dla ktorego sciaga sie dane
+
+    10. Modyfikacja szczegółów użytkownika
+
+Dostęp : Zalogowany
+
+Żądanie : PUT /api/editUserDetails
+
+Przykładowe ciało :
+
+{
+    "firstName":"Reanu",
+    "lastName":"Keeves",
+    "phoneNumber":"123123123",
+    "birthDate":"2012-04-21T18:25:43.511Z",
+    "company":"ymca",
+    "nip":"77665544",
+    "avatar":[12,12,32]
+}
+
+Wymagane jest podanie nagłowka "Authorization" by zczytac uzytkownika dla ktorego modyfikuje sie dane
+
+    11. Dodanie karty kredytowej
+
+Dostęp : Zalogowany
+
+Żądanie : POST /api/creditCards
+
+Przykładowe ciało :
+
+{
+    "cardNumber":"1234",
+    "expirationDate":"2012-04-21T18:25:43.511Z",
+    "securityCode":"abcd"
+}
+
+Wymagane jest podanie nagłowka "Authorization" by zczytac uzytkownika dla ktorego dodaje sie dane
+
+    12. Pobranie kart kredytowych
+
+Dostęp : Zalogowany
+
+Żądanie : GET /api/creditCards
+
+Wymagane jest podanie nagłowka "Authorization" by zczytac uzytkownika dla ktorego pobiera sie dane
+
+    13. Usuwanie karty kredytowej
+
+Dostęp : Zalogowany
+
+Żądanie : DELETE /api/creditCards
+
+Parametry :
+    - cardId - Id karty kredytowej do usunięcia
+
+Wymagane jest podanie nagłowka "Authorization" by zczytac uzytkownika dla ktorego usuwa sie dane

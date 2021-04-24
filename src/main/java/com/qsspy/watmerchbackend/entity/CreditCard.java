@@ -1,5 +1,6 @@
 package com.qsspy.watmerchbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -26,5 +27,6 @@ public class CreditCard {
 
     @ManyToOne
     @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @JsonIgnore
     private ShopUser user;
 }

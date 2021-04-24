@@ -3,6 +3,7 @@ package com.qsspy.watmerchbackend.controller;
 import com.jayway.jsonpath.InvalidJsonException;
 import com.qsspy.watmerchbackend.entity.Role;
 import com.qsspy.watmerchbackend.entity.ShopUser;
+import com.qsspy.watmerchbackend.entity.ShopUserDetails;
 import com.qsspy.watmerchbackend.exception.login.UserNotFoundException;
 import com.qsspy.watmerchbackend.exception.login.WrongPasswordException;
 import com.qsspy.watmerchbackend.exception.register.RegisterException;
@@ -49,5 +50,13 @@ public class UserController {
             throw new InvalidJsonException("Data is not correct.");
         }
         return userService.getUser(credsModel.getUsername(), credsModel.getPassword());
+    }
+
+    @PutMapping("/editUserDetails")
+    public ShopUserDetails editUserDetails(
+            @RequestBody ShopUserDetails details,
+            @RequestHeader(name = "Authorization") String authString
+    ) {
+        return userService.editUser(details, authString);
     }
 }

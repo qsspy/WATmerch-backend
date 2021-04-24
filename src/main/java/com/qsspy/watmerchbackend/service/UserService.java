@@ -2,11 +2,14 @@ package com.qsspy.watmerchbackend.service;
 
 import com.qsspy.watmerchbackend.entity.Role;
 import com.qsspy.watmerchbackend.entity.ShopUser;
+import com.qsspy.watmerchbackend.entity.ShopUserDetails;
 import com.qsspy.watmerchbackend.exception.login.UserNotFoundException;
 import com.qsspy.watmerchbackend.exception.login.WrongPasswordException;
 import com.qsspy.watmerchbackend.exception.register.EmailNotAvailableException;
 import com.qsspy.watmerchbackend.exception.register.RegisterException;
 import com.qsspy.watmerchbackend.exception.register.UserExistsException;
+import com.qsspy.watmerchbackend.model.UserAndPasswordModel;
+import com.qsspy.watmerchbackend.repository.UserDetailsRepository;
 import com.qsspy.watmerchbackend.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,11 +23,12 @@ public class UserService implements IUserService{
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    private UserDetailsRepository userDetailsRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder encoder) {
-
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDetailsRepository userDetailsRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = encoder;
+        this.passwordEncoder = passwordEncoder;
+        this.userDetailsRepository = userDetailsRepository;
     }
 
     @Override
@@ -61,5 +65,16 @@ public class UserService implements IUserService{
         }
 
         return user;
+    }
+
+    @Override
+    public ShopUserDetails editUser(ShopUserDetails details, String authString) {
+
+        UserAndPasswordModel userCreds = UserAndPasswordModel.basicAuthBase64Decode(authString);
+
+        ShopUser user = userRepository.findByUsername(userCreds.getUsername());
+        details.setId(user.getUserDetails().getId());
+        return userDetailsRepository.save(details);
+
     }
 }

@@ -2,6 +2,7 @@ package com.qsspy.watmerchbackend.service;
 
 import com.qsspy.watmerchbackend.entity.Role;
 import com.qsspy.watmerchbackend.entity.ShopUser;
+import com.qsspy.watmerchbackend.entity.ShopUserDetails;
 import com.qsspy.watmerchbackend.exception.login.UserNotFoundException;
 import com.qsspy.watmerchbackend.exception.login.WrongPasswordException;
 import com.qsspy.watmerchbackend.exception.register.RegisterException;
@@ -13,4 +14,6 @@ public interface IUserService {
     ShopUser register(ShopUser user) throws RegisterException;
 
     ShopUser getUser(String username, String password) throws UserNotFoundException, WrongPasswordException;
+
+    ShopUserDetails editUser(ShopUserDetails details, String authString);
 }
