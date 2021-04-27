@@ -50,6 +50,10 @@ public class UserService implements IUserService{
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role basicRole = new Role();
+        basicRole.setId(1);
+        basicRole.setName(Role.RoleType.ROLE_USER);
+        user.setRole(basicRole);
         return userRepository.save(user);
     }
 
