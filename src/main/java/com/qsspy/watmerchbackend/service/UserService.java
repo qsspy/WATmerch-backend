@@ -32,11 +32,16 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public Page<ShopUser> getUsers(int page, int size, Boolean detailed, Boolean showAddresses, Role.RoleType role) {
+    public Page<ShopUser> getUsers(int page, int size, String keyword, int roleId) {
 
         Sort sort = Sort.by(Sort.Direction.ASC, "username");
         Pageable pageable = PageRequest.of(page,size,sort);
-        return userRepository.findAll(pageable);
+
+        if(roleId == 0) {
+            return userRepository.findByUsernameContaining(keyword,pageable);
+        }
+
+        return userRepository.findByRoleIdAndUsernameContaining(roleId, keyword, pageable);
     }
 
     @Override
@@ -50,10 +55,12 @@ public class UserService implements IUserService{
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role basicRole = new Role();
-        basicRole.setId(1);
-        basicRole.setName(Role.RoleType.ROLE_USER);
-        user.setRole(basicRole);
+        if(user.getRole() == null) {
+            Role basicRole = new Role();
+            basicRole.setId(1);
+            basicRole.setName(Role.RoleType.USER);
+            user.setRole(basicRole);
+        }
         return userRepository.save(user);
     }
 
@@ -69,6 +76,11 @@ public class UserService implements IUserService{
         }
 
         return user;
+    }
+
+    @Override
+    public ShopUser getUser(long id) {
+        return userRepository.findById(id).get();
     }
 
     @Override

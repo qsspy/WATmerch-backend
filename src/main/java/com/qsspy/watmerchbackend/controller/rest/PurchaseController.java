@@ -1,4 +1,4 @@
-package com.qsspy.watmerchbackend.controller;
+package com.qsspy.watmerchbackend.controller.rest;
 
 import com.qsspy.watmerchbackend.entity.Purchase;
 import com.qsspy.watmerchbackend.exception.login.LoginException;

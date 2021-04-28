@@ -1,4 +1,4 @@
-package com.qsspy.watmerchbackend.controller;
+package com.qsspy.watmerchbackend.controller.rest;
 
 import com.jayway.jsonpath.InvalidJsonException;
 import com.qsspy.watmerchbackend.entity.Role;
@@ -22,18 +22,18 @@ public class UserController {
         this.userService = userService;
     }
 
-    //Pobiera listę użytkowników
-    @GetMapping("/users")
-    public Page<ShopUser> getUsers(
-            @RequestParam(defaultValue = "0") int page, // numer strony 0-indexed
-            @RequestParam(defaultValue = "20") int size, // wielkość strony
-            @RequestParam(defaultValue = "false") Boolean detailed,
-            @RequestParam(defaultValue = "false", name = "show-addresses") Boolean showAddresses,
-            @RequestParam(required = false, name = "role-type") Role.RoleType roleType
-    ) {
-
-        return userService.getUsers(page, size, detailed, showAddresses, roleType);
-    }
+//    //Pobiera listę użytkowników
+//    @GetMapping("/users")
+//    public Page<ShopUser> getUsers(
+//            @RequestParam(defaultValue = "0") int page, // numer strony 0-indexed
+//            @RequestParam(defaultValue = "20") int size, // wielkość strony
+//            @RequestParam(defaultValue = "false") Boolean detailed,
+//            @RequestParam(defaultValue = "false", name = "show-addresses") Boolean showAddresses,
+//            @RequestParam(required = false, name = "role-type") Role.RoleType roleType
+//    ) {
+//
+//        return userService.getUsers(page, size, detailed, showAddresses, roleType);
+//    }
 
     //Zapisuje nowego użytkownika (register)
     @PostMapping("/register")

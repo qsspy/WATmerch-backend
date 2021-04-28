@@ -1,5 +1,6 @@
 package com.qsspy.watmerchbackend.configuration;
 
+import com.qsspy.watmerchbackend.entity.Role;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +33,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+//        auth
+//                .inMemoryAuthentication()
+//                .withUser("admin")
+//                .password("admin")
+//                .roles("ADMIN");
     }
 
     @Override
@@ -40,12 +46,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/css/**", "/images/**", "/js/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/register").permitAll() //register
                 .antMatchers(HttpMethod.POST, "/api/loginUser").permitAll() //try to login
                 .antMatchers(HttpMethod.POST, "/api/buy").permitAll() //buy items
                 .antMatchers(HttpMethod.GET, "/api/categories").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/products/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/crm/users")./*hasAuthority(Role.RoleType.ADMIN.name())*/permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

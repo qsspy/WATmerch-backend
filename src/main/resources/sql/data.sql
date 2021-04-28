@@ -1,8 +1,8 @@
  --Initial roles
 
-INSERT INTO role (name) VALUES ("ROLE_USER");
-INSERT INTO role (name) VALUES ("ROLE_EMPLOYEE");
-INSERT INTO role (name) VALUES ("ROLE_ADMIN");
+INSERT INTO role (name) VALUES ("USER");
+INSERT INTO role (name) VALUES ("EMPLOYEE");
+INSERT INTO role (name) VALUES ("ADMIN");
 
  -- Initial categories
 

@@ -10,10 +10,11 @@ import org.springframework.data.domain.Page;
 
 public interface IUserService {
 
-    Page<ShopUser> getUsers(int page, int size, Boolean detailed, Boolean showAddresses, Role.RoleType role);
+    Page<ShopUser> getUsers(int page, int size, String keyword, int roleId);
     ShopUser register(ShopUser user) throws RegisterException;
 
     ShopUser getUser(String username, String password) throws UserNotFoundException, WrongPasswordException;
+    ShopUser getUser(long Id);
 
     ShopUserDetails editUser(ShopUserDetails details, String authString);
 }

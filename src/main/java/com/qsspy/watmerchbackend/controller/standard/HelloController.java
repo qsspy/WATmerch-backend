@@ -1,14 +1,14 @@
-package com.qsspy.watmerchbackend.controller;
+package com.qsspy.watmerchbackend.controller.standard;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class HelloController {
 
     @GetMapping("/")
     public String helloWorld() {
 
-        return "Hello World!";
+        return "redirect:/crm/users";
     }
 }

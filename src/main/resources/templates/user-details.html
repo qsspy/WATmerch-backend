@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>WATmerch - szczegóły użytkownika</title>
+</head>
+<body>
+    <p th:text="${user.id}"></p>
+    <p th:text="${user.username}"></p>
+    <p th:text="${user.userDetails.firstName}"></p>
+    <p th:text="${user.userDetails.lastName}"></p>
+</body>
+</html>

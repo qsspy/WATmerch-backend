@@ -10,9 +10,9 @@ import javax.persistence.*;
 public class Role {
 
     public enum RoleType {
-        ROLE_USER,
-        ROLE_EMPLOYEE,
-        ROLE_ADMIN
+        USER,
+        EMPLOYEE,
+        ADMIN
     }
 
     @Id
