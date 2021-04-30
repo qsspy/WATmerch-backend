@@ -21,4 +21,5 @@ public interface IUserService {
 
     ShopUserDetails editUserDetails(ShopUserDetails details, String authString);
     ShopUser editUser(Map<String,String> parameters, long Id) throws JsonProcessingException;
+    void deleteUser(long id);
 }

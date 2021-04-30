@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -52,7 +54,6 @@ public class CRMController {
         model.addAttribute("paginator",paginator);
         model.addAttribute("pageSizes",crmService.getPageSizes());
 
-        System.out.println(paginator.getPages());
         return "users";
     }
 
@@ -76,23 +77,24 @@ public class CRMController {
     }
 
     @PostMapping("/userDetails/{userId}")
-    public String editUserDetailsView(
-            Model model,
+    public RedirectView editUserDetailsView(
             @PathVariable long userId,
-            @RequestParam Map<String,String> allRequestParams) throws IOException {
+            @RequestParam Map<String,String> allRequestParams,
+            RedirectAttributes attributes) throws IOException {
 
-        ShopUser user = userService.editUser(allRequestParams,userId);
-        byte[] byteImage;
-        if(user.getUserDetails().getAvatar() != null) {
-            byteImage = user.getUserDetails().getAvatar();
-        } else {
-            byteImage = Files.readAllBytes(Path.of("src\\main\\resources\\static\\images\\users_basic_images\\blank-user.png"));
-        }
-        String base64Image = Base64.getMimeEncoder().encodeToString(byteImage);
-        model.addAttribute("avatar",base64Image);
-        model.addAttribute("user",userService.getUser(userId));
-        model.addAttribute("roles",crmService.getRoles());
-        model.addAttribute("success",true);
-        return "user-details";
+        userService.editUser(allRequestParams,userId);
+
+        attributes.addFlashAttribute("success", true);
+        return new RedirectView("/crm/userDetails/" + userId);
+    }
+
+    @PostMapping("/users/delete/{userId}")
+    public RedirectView deleteUser(
+            @PathVariable Long userId,
+            RedirectAttributes attributes
+    ) {
+        userService.deleteUser(userId);
+        attributes.addFlashAttribute("deleted",true);
+        return new RedirectView("/crm/users");
     }
 }

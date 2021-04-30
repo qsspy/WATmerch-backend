@@ -114,6 +114,11 @@ public class UserService implements IUserService{
         return newUser;
     }
 
+    @Override
+    public void deleteUser(long id) {
+        userRepository.deleteById(id);
+    }
+
     private Map<String, Object>generateNestedMap(Map<String, String> map, String separatorRegex, String separator) {
 
         Map<String,Map<String, String>> nestedMaps = new HashMap<>();
