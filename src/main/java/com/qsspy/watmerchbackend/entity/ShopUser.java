@@ -1,5 +1,6 @@
 package com.qsspy.watmerchbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonMerge;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class ShopUser {
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
+    @JsonMerge
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_details_id", referencedColumnName = "id")
     private ShopUserDetails userDetails;
@@ -37,6 +39,7 @@ public class ShopUser {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
+    @JsonMerge
     @OneToMany(mappedBy = "user")
     private List<CreditCard> creditCards;
 

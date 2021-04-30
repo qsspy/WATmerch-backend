@@ -1,6 +1,5 @@
 package com.qsspy.watmerchbackend.controller.standard;
 
-import com.qsspy.watmerchbackend.entity.Role;
 import com.qsspy.watmerchbackend.entity.ShopUser;
 import com.qsspy.watmerchbackend.model.PaginatorModel;
 import com.qsspy.watmerchbackend.service.ICRMService;
@@ -8,12 +7,13 @@ import com.qsspy.watmerchbackend.service.IUserService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/crm")
@@ -33,13 +33,8 @@ public class CRMController {
             @RequestParam(required = false) String keyword,
             @RequestParam(defaultValue = "0") Integer roleId,
             @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "1") Integer size
+            @RequestParam(defaultValue = "20") Integer size
     ) {
-
-        System.out.println("keyword: " + keyword);
-        System.out.println("roleId: " + roleId);
-        System.out.println("page: " + page);
-        System.out.println("size: " + size);
 
         if(keyword == null) {
             keyword = "";
@@ -64,10 +59,40 @@ public class CRMController {
     @GetMapping("/userDetails/{userId}")
     public String getUserDetailsView(
             Model model,
-            @PathVariable int userId)
-    {
+            @PathVariable int userId) throws IOException {
 
+        ShopUser user = userService.getUser(userId);
+        byte[] byteImage;
+        if(user.getUserDetails().getAvatar() != null) {
+            byteImage = user.getUserDetails().getAvatar();
+        } else {
+            byteImage = Files.readAllBytes(Path.of("src\\main\\resources\\static\\images\\users_basic_images\\blank-user.png"));
+        }
+        String base64Image = Base64.getMimeEncoder().encodeToString(byteImage);
+        model.addAttribute("avatar",base64Image);
         model.addAttribute("user",userService.getUser(userId));
+        model.addAttribute("roles",crmService.getRoles());
+        return "user-details";
+    }
+
+    @PostMapping("/userDetails/{userId}")
+    public String editUserDetailsView(
+            Model model,
+            @PathVariable long userId,
+            @RequestParam Map<String,String> allRequestParams) throws IOException {
+
+        ShopUser user = userService.editUser(allRequestParams,userId);
+        byte[] byteImage;
+        if(user.getUserDetails().getAvatar() != null) {
+            byteImage = user.getUserDetails().getAvatar();
+        } else {
+            byteImage = Files.readAllBytes(Path.of("src\\main\\resources\\static\\images\\users_basic_images\\blank-user.png"));
+        }
+        String base64Image = Base64.getMimeEncoder().encodeToString(byteImage);
+        model.addAttribute("avatar",base64Image);
+        model.addAttribute("user",userService.getUser(userId));
+        model.addAttribute("roles",crmService.getRoles());
+        model.addAttribute("success",true);
         return "user-details";
     }
 }

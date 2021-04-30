@@ -1,5 +1,6 @@
 package com.qsspy.watmerchbackend.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.qsspy.watmerchbackend.entity.Role;
 import com.qsspy.watmerchbackend.entity.ShopUser;
 import com.qsspy.watmerchbackend.entity.ShopUserDetails;
@@ -7,6 +8,8 @@ import com.qsspy.watmerchbackend.exception.login.UserNotFoundException;
 import com.qsspy.watmerchbackend.exception.login.WrongPasswordException;
 import com.qsspy.watmerchbackend.exception.register.RegisterException;
 import org.springframework.data.domain.Page;
+
+import java.util.Map;
 
 public interface IUserService {
 
@@ -16,5 +19,6 @@ public interface IUserService {
     ShopUser getUser(String username, String password) throws UserNotFoundException, WrongPasswordException;
     ShopUser getUser(long Id);
 
-    ShopUserDetails editUser(ShopUserDetails details, String authString);
+    ShopUserDetails editUserDetails(ShopUserDetails details, String authString);
+    ShopUser editUser(Map<String,String> parameters, long Id) throws JsonProcessingException;
 }

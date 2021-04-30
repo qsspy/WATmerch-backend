@@ -1,14 +1,180 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>WATmerch - szczegóły użytkownika</title>
+
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
-    <p th:text="${user.id}"></p>
-    <p th:text="${user.username}"></p>
-    <p th:text="${user.userDetails.firstName}"></p>
-    <p th:text="${user.userDetails.lastName}"></p>
+    <form class="container elevated-card my-4 p-3" method="post" th:action="'/crm/userDetails/' + ${userId}">
+        <div th:if="${success}" class="alert alert-success" role="alert">
+            Pomyślnie edytowano użytkownika!
+        </div>
+        <div class="d-flex">
+            <div class="d-flex flex-column">
+                <img th:src="'data:image/jpeg;base64,' + ${avatar}" alt="user_avatar" class="details-image">
+            </div>
+            <div class="d-flex flex-wrap">
+                <div class="px-3 ">
+                    <input type="hidden" id="id" name="id" th:value="${userId}">
+                    <div class="form-group">
+                        <label for="username">Nazwa użytkownika</label>
+                        <input type="text" class="form-control" id="username" name="username" th:value="${user.username}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" th:value="${user.email}"
+                            readonly>
+                    </div>
+                </div>
+                <div class="px-3 ">
+                    <div class="form-group">
+                        <label for="role">Rola</label>
+                        <select class="form-control" id="role" name="role.id">
+                            <option th:each="role : ${roles}"
+                                    th:value="${role.id}"
+                                    th:text="${role.name.name()}"
+                                    th:selected="${user.role.id} == ${role.id}" ></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="enabled">Blokada konta</label>
+                        <select class="form-control" id="enabled" name="enabled">
+                            <option value="true" th:selected="${user.enabled}">Nie</option>
+                            <option value="false" th:selected="${!user.enabled}">Tak</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap mt-4">
+            <div class="mr-5">
+                <h3>Dane osobowe</h3>
+                <div class="form-group">
+                    <label for="firstName">Imię</label>
+                    <input type="text" class="form-control" id="firstName" name="userDetails.firstName" th:value="${user.userDetails.firstName}" placeholder="Imię">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Nazwisko</label>
+                    <input type="text" class="form-control" id="lastName" name="userDetails.lastName" th:value="${user.userDetails.lastName}" placeholder="Nazwisko">
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Numer telefonu</label>
+                    <input type="text" class="form-control" id="phoneNumber" name="userDetails.phoneNumber" th:value="${user.userDetails.phoneNumber}" placeholder="Numer telefonu">
+                </div>
+                <div class="form-group">
+                    <label for="birthDate">Data urodzenia</label>
+                    <input type="text" class="form-control" id="birthDate" name="userDetails.birthDate" th:value="${#dates.format(user.userDetails.birthDate, 'yyyy-MM-dd')}" placeholder="Data urodzenia">
+                </div>
+            </div>
+            <div class="mr-5">
+                <h3>Dane firmowe</h3>
+                <div class="form-group">
+                    <label for="company">Nazwa Firmy</label>
+                    <input type="text" class="form-control" id="company" name="userDetails.company" th:value="${user.userDetails.company}" placeholder="Nazwa Firmy">
+                </div>
+                <div class="form-group">
+                    <label for="nip">NIP</label>
+                    <input type="text" class="form-control" id="nip" name="userDetails.nip" th:value="${user.userDetails.nip}" placeholder="NIP">
+                </div>
+            </div>
+            <div class="mr-5">
+                <h3>Adres dostawy</h3>
+                <div class="form-group">
+                    <label for="shippingcity">Miasto</label>
+                    <input type="text" class="form-control" id="shippingcity" name="shippingAddress.city" placeholder="Miasto"
+                           th:value="${user.shippingAddress.city}">
+                </div>
+                <div class="form-group">
+                    <label for="shippingcountry">Kraj</label>
+                    <input type="text" class="form-control" id="shippingcountry" name="shippingAddress.country" placeholder="Kraj"
+                           th:value="${user.shippingAddress.country}">
+                </div>
+                <div class="form-group">
+                    <label for="shippingfirstName">Imię</label>
+                    <input type="text" class="form-control" id="shippingfirstName" name="shippingAddress.firstName" placeholder="Imię"
+                           th:value="${user.shippingAddress.firstName}">
+                </div>
+                <div class="form-group">
+                    <label for="shippinglastName">Nazwisko</label>
+                    <input type="text" class="form-control" id="shippinglastName" name="shippingAddress.lastName" placeholder="Nazwisko"
+                           th:value="${user.shippingAddress.lastName}">
+                </div>
+                <div class="form-group">
+                    <label for="shippingphoneNumber">Numer telefonu</label>
+                    <input type="text" class="form-control" id="shippingphoneNumber" name="shippingAddress.phoneNumber" placeholder="Numer telefonu"
+                           th:value="${user.shippingAddress.phoneNumber}">
+                </div>
+                <div class="form-group">
+                    <label for="shippingpostalCode">Kod pocztowy</label>
+                    <input type="text" class="form-control" id="shippingpostalCode" name="shippingAddress.postalCode" placeholder="Kod pocztowy"
+                           th:value="${user.shippingAddress.postalCode}">
+                </div>
+                <div class="form-group">
+                    <label for="shippingstreet">Ulica</label>
+                    <input type="text" class="form-control" id="shippingstreet" name="shippingAddress.street" placeholder="Ulica"
+                           th:value="${user.shippingAddress.street}">
+                </div>
+                <div class="form-group">
+                    <label for="shippingstate">Województwo</label>
+                    <input type="text" class="form-control" id="shippingstate" name="shippingAddress.state" placeholder="Województwo"
+                           th:value="${user.shippingAddress.state}">
+                </div>
+            </div>
+            <div class="mr-5">
+                <h3>Adres Rozliczeniowy</h3>
+                <div class="form-group">
+                    <label for="billingcity">Miasto</label>
+                    <input type="text" class="form-control" id="billingcity" name="billingAddress.city" placeholder="Miasto"
+                           th:value="${user.billingAddress.city}">
+                </div>
+                <div class="form-group">
+                    <label for="billingcountry">Kraj</label>
+                    <input type="text" class="form-control" id="billingcountry" name="billingAddress.country" placeholder="Kraj"
+                           th:value="${user.billingAddress.country}">
+                </div>
+                <div class="form-group">
+                    <label for="billingfirstName">Imię</label>
+                    <input type="text" class="form-control" id="billingfirstName" name="billingAddress.firstName" placeholder="Imię"
+                           th:value="${user.billingAddress.firstName}">
+                </div>
+                <div class="form-group">
+                    <label for="billinglastName">Nazwisko</label>
+                    <input type="text" class="form-control" id="billinglastName" name="billingAddress.lastName" placeholder="Nazwisko"
+                           th:value="${user.billingAddress.lastName}">
+                </div>
+                <div class="form-group">
+                    <label for="billingphoneNumber">Numer telefonu</label>
+                    <input type="text" class="form-control" id="billingphoneNumber" name="billingAddress.phoneNumber" placeholder="Numer telefonu"
+                           th:value="${user.billingAddress.phoneNumber}">
+                </div>
+                <div class="form-group">
+                    <label for="billingpostalCode">Kod pocztowy</label>
+                    <input type="text" class="form-control" id="billingpostalCode" name="billingAddress.postalCode" placeholder="Kod pocztowy"
+                           th:value="${user.billingAddress.postalCode}">
+                </div>
+                <div class="form-group">
+                    <label for="billingstreet">Ulica</label>
+                    <input type="text" class="form-control" id="billingstreet" name="billingAddress.street" placeholder="Ulica"
+                           th:value="${user.billingAddress.street}">
+                </div>
+                <div class="form-group">
+                    <label for="billingstate">Województwo</label>
+                    <input type="text" class="form-control" id="billingstate" name="billingAddress.state" placeholder="Województwo"
+                           th:value="${user.billingAddress.state}">
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <a href="/crm/users" class="btn btn-primary mx-3"><< Wróć</a>
+            <button type="submit" class="btn btn-success mx-3">Aktualizuj</button>
+        </div>
+    </form>
 </body>
+
 </html>

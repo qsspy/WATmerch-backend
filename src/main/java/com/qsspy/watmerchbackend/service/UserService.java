@@ -1,5 +1,7 @@
 package com.qsspy.watmerchbackend.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qsspy.watmerchbackend.entity.Role;
 import com.qsspy.watmerchbackend.entity.ShopUser;
 import com.qsspy.watmerchbackend.entity.ShopUserDetails;
@@ -17,6 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class UserService implements IUserService{
@@ -84,7 +90,7 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public ShopUserDetails editUser(ShopUserDetails details, String authString) {
+    public ShopUserDetails editUserDetails(ShopUserDetails details, String authString) {
 
         UserAndPasswordModel userCreds = UserAndPasswordModel.basicAuthBase64Decode(authString);
 
@@ -92,5 +98,45 @@ public class UserService implements IUserService{
         details.setId(user.getUserDetails().getId());
         return userDetailsRepository.save(details);
 
+    }
+
+    @Override
+    public ShopUser editUser(Map<String,String> params, long id) throws JsonProcessingException {
+
+        ShopUser oldUser = userRepository.findById(id).get();
+        Map<String, Object> nestedMap = generateNestedMap(params, "\\.", ".");
+        ObjectMapper jsonMapper = new ObjectMapper();
+
+        String json = jsonMapper.writeValueAsString(nestedMap);
+        System.out.println(json);
+        jsonMapper.readerForUpdating(oldUser).readValue(json);
+        ShopUser newUser = userRepository.save(oldUser);
+        return newUser;
+    }
+
+    private Map<String, Object>generateNestedMap(Map<String, String> map, String separatorRegex, String separator) {
+
+        Map<String,Map<String, String>> nestedMaps = new HashMap<>();
+        Map<String, Object> outMap = new HashMap<>();
+
+        for(String key: map.keySet()) {
+
+            if(key.contains(separator)) {
+
+                String[] parts = key.split(separatorRegex,2);
+                if(!nestedMaps.containsKey(parts[0])) {
+                    nestedMaps.put(parts[0], new HashMap());
+                }
+                nestedMaps.get(parts[0]).put(parts[1],map.get(key));
+            } else {
+                outMap.put(key, map.get(key));
+            }
+        }
+
+        for(String nestedKey : nestedMaps.keySet()) {
+            outMap.put(nestedKey,generateNestedMap(nestedMaps.get(nestedKey),separatorRegex, separator));
+        }
+
+        return outMap;
     }
 }
