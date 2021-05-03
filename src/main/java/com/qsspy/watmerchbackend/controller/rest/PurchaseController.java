@@ -3,6 +3,8 @@ package com.qsspy.watmerchbackend.controller.rest;
 import com.qsspy.watmerchbackend.entity.Purchase;
 import com.qsspy.watmerchbackend.exception.login.LoginException;
 import com.qsspy.watmerchbackend.service.IPurchaseService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,22 +18,26 @@ public class PurchaseController {
         this.purchaseService = purchaseService;
     }
 
-    // Wykonanie zakupu
+    @ApiOperation(value = "Wykonanie zakupu",
+                  notes = "Wykonanie zakupu. " +
+                          "Jeżeli zostanie podany nagłówek 'Authorization' zakup będzie skorelowany z użytkownikiem." +
+                          "Podanie pola 'user' może być całkowicie pominięte")
     @PostMapping("/buy")
     public String makePurchase(
             @RequestHeader(name = "Authorization", required = false) String authString,
-            @RequestBody Purchase purchase) throws LoginException {
+            @ApiParam(name = "Obiekt zakupu") @RequestBody Purchase purchase) throws LoginException {
 
         purchaseService.makePurchase(purchase, authString);
         return "Purchase completed!";
     }
 
-    // Pobranie listy zakupów
+    @ApiOperation(value = "Pobranie strony listy zakupów",
+                  notes = "Pobranie strony listy zakupów dla użytkownika podanego w 'Authorization'")
     @GetMapping("/purchases")
     public Page<Purchase> getPurchases(
             @RequestHeader(name = "Authorization") String authString,
-            @RequestParam(defaultValue = "20") Integer size,
-            @RequestParam(defaultValue = "0") Integer page
+            @ApiParam(name = "Wielkość strony") @RequestParam(defaultValue = "20") Integer size,
+            @ApiParam(name = "Numer strony (0-indexed)") @RequestParam(defaultValue = "0") Integer page
     ) {
 
         return purchaseService.getPurchases(authString, size, page);

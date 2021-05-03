@@ -8,6 +8,8 @@ import com.qsspy.watmerchbackend.exception.login.WrongPasswordException;
 import com.qsspy.watmerchbackend.exception.register.RegisterException;
 import com.qsspy.watmerchbackend.model.UserAndPasswordModel;
 import com.qsspy.watmerchbackend.service.IUserService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,16 +22,21 @@ public class UserController {
         this.userService = userService;
     }
 
-    //Zapisuje nowego użytkownika (register)
+    @ApiOperation(value = "Zapisuje nowego użytkownika (register)",
+                  notes = "Zapisuje nowego użytkownika. Nie wymaga autoryzacji")
     @PostMapping("/register")
-    public ShopUser register(@RequestBody ShopUser user) throws RegisterException {
+    public ShopUser register(
+            @ApiParam(name = "Nowy użytkownik") @RequestBody ShopUser user
+    ) throws RegisterException {
 
         return userService.register(user);
     }
 
-    //Zwraca dane uzytkownika, jeżeli podano poprawne dane logowanie
+    @ApiOperation(value = "Pobranie danych użytkownika (logowanie)")
     @PostMapping("/loginUser")
-    public ShopUser attemptLogin(@RequestBody UserAndPasswordModel credsModel) throws UserNotFoundException, WrongPasswordException {
+    public ShopUser attemptLogin(
+            @ApiParam(name = "Dane logowania") @RequestBody UserAndPasswordModel credsModel
+    ) throws UserNotFoundException, WrongPasswordException {
 
         if(credsModel == null || credsModel.getPassword() == null || credsModel.getUsername() == null) {
             throw new InvalidJsonException("Data is not correct.");
@@ -37,10 +44,12 @@ public class UserController {
         return userService.getUser(credsModel.getUsername(), credsModel.getPassword());
     }
 
+    @ApiOperation(value = "Edycja szczegółowych danych użytkownika",
+                  notes = "Edycja szczegółowych danych użytkownika identyfikowanego z nagłowka 'Authorization'")
     @PutMapping("/editUserDetails")
     public ShopUserDetails editUserDetails(
-            @RequestBody ShopUserDetails details,
-            @RequestHeader(name = "Authorization") String authString
+            @RequestHeader(name = "Authorization") String authString,
+            @ApiParam(name = "Szcegóły użytkownika") @RequestBody ShopUserDetails details
     ) {
         return userService.editUserDetails(details, authString);
     }
