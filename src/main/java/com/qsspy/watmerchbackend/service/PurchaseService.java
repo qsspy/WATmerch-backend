@@ -1,7 +1,6 @@
 package com.qsspy.watmerchbackend.service;
 
 import com.qsspy.watmerchbackend.entity.OrderProduct;
-import com.qsspy.watmerchbackend.entity.Product;
 import com.qsspy.watmerchbackend.entity.Purchase;
 import com.qsspy.watmerchbackend.entity.ShopUser;
 import com.qsspy.watmerchbackend.exception.login.LoginException;
@@ -15,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PurchaseService implements IPurchaseService {

@@ -5,7 +5,6 @@ import com.qsspy.watmerchbackend.entity.ShopUser;
 import com.qsspy.watmerchbackend.model.UserAndPasswordModel;
 import com.qsspy.watmerchbackend.repository.CreditCardRepository;
 import com.qsspy.watmerchbackend.repository.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

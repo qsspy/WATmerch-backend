@@ -1,7 +1,6 @@
 package com.qsspy.watmerchbackend.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.qsspy.watmerchbackend.entity.Role;
 import com.qsspy.watmerchbackend.entity.ShopUser;
 import com.qsspy.watmerchbackend.entity.ShopUserDetails;
 import com.qsspy.watmerchbackend.exception.login.UserNotFoundException;
