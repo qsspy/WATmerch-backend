@@ -2,6 +2,7 @@ package com.qsspy.watmerchbackend.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.qsspy.watmerchbackend.entity.Address;
 import com.qsspy.watmerchbackend.entity.Role;
 import com.qsspy.watmerchbackend.entity.ShopUser;
 import com.qsspy.watmerchbackend.entity.ShopUserDetails;
@@ -11,6 +12,7 @@ import com.qsspy.watmerchbackend.exception.register.EmailNotAvailableException;
 import com.qsspy.watmerchbackend.exception.register.RegisterException;
 import com.qsspy.watmerchbackend.exception.register.UserExistsException;
 import com.qsspy.watmerchbackend.model.UserAndPasswordModel;
+import com.qsspy.watmerchbackend.repository.AddressRepository;
 import com.qsspy.watmerchbackend.repository.UserDetailsRepository;
 import com.qsspy.watmerchbackend.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -29,11 +31,13 @@ public class UserService implements IUserService{
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private UserDetailsRepository userDetailsRepository;
+    private AddressRepository addressRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDetailsRepository userDetailsRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDetailsRepository userDetailsRepository, AddressRepository addressRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userDetailsRepository = userDetailsRepository;
+        this.addressRepository = addressRepository;
     }
 
     @Override
@@ -97,6 +101,21 @@ public class UserService implements IUserService{
         details.setId(user.getUserDetails().getId());
         return userDetailsRepository.save(details);
 
+    }
+
+    @Override
+    public Address editUserAddress(boolean isAddressShipping, Address address, String authString) {
+
+        UserAndPasswordModel userCreds = UserAndPasswordModel.basicAuthBase64Decode(authString);
+
+        ShopUser user = userRepository.findByUsername(userCreds.getUsername());
+        if(isAddressShipping) {
+            address.setId(user.getShippingAddress().getId());
+        } else {
+            address.setId(user.getBillingAddress().getId());
+        }
+
+        return addressRepository.save(address);
     }
 
     @Override
