@@ -32,11 +32,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
-//        auth
-//                .inMemoryAuthentication()
-//                .withUser("admin")
-//                .password("admin")
-//                .roles("ADMIN");
     }
 
     @Override
@@ -54,6 +49,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/categories").hasAnyAuthority(Role.RoleType.EMPLOYEE.name())
                 .antMatchers(HttpMethod.POST, "/api/products").hasAnyAuthority(Role.RoleType.EMPLOYEE.name())
                 .antMatchers(HttpMethod.GET, "/crm/**").hasAuthority(Role.RoleType.ADMIN.name())
+                .antMatchers("/chat").permitAll()
+                .antMatchers("/chat/support").permitAll()
+                .antMatchers("/user/queue/support").permitAll()
+                .antMatchers("/topic/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
