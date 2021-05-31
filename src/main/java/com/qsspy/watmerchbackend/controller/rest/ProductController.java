@@ -66,4 +66,13 @@ public class ProductController {
 
         return productService.postProduct(product);
     }
+
+    @GetMapping("products/randomProducts")
+    public List<Product> getRandomProducts(
+            @RequestParam(defaultValue = "false") Boolean extended,
+            @RequestParam(defaultValue = "false") Boolean detailed,
+            @RequestParam(defaultValue = "5") int count
+    ) {
+        return productService.getRandomProducts(count,extended,detailed);
+    }
 }

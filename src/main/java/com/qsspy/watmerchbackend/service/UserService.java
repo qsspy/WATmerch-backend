@@ -84,6 +84,8 @@ public class UserService implements IUserService{
             throw new WrongPasswordException("Invalid password.");
         }
 
+        user.setPassword(password);
+
         return user;
     }
 
