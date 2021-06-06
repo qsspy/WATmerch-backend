@@ -7,10 +7,10 @@ import com.qsspy.watmerchbackend.service.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -61,8 +61,8 @@ public class WatmerchBackendApplication {
 			basicDetails.setShortDescription("This is short description");
 			basicDetails.setDiscountPercent(.1f);
 			String filename = "cup" + (new Random().nextInt(3) + 1) + ".jpg";
-			File image = new File("src\\main\\resources\\static\\images\\product_basic_images\\cups\\" + filename);
-			basicDetails.setLogoImage(Files.readAllBytes(image.toPath()));
+			Resource image = new ClassPathResource("/static/images/product_basic_images/cups/" + filename);
+			basicDetails.setLogoImage(image.getInputStream().readAllBytes());
 
 			Product product = new Product();
 			product.setBarcode(Integer.toString(barcode));
@@ -89,8 +89,8 @@ public class WatmerchBackendApplication {
 			basicDetails.setShortDescription("This is short description");
 			basicDetails.setDiscountPercent(.1f);
 			String filename = "bluse" + (new Random().nextInt(3) + 1) + ".jpg";
-			File image = new File("src\\main\\resources\\static\\images\\product_basic_images\\sweatshirts\\" + filename);
-			basicDetails.setLogoImage(Files.readAllBytes(image.toPath()));
+			Resource image = new ClassPathResource("/static/images/product_basic_images/sweatshirts/" + filename);
+			basicDetails.setLogoImage(image.getInputStream().readAllBytes());
 
 			Product product = new Product();
 			product.setBarcode(Integer.toString(barcode));
@@ -117,8 +117,8 @@ public class WatmerchBackendApplication {
 			basicDetails.setShortDescription("This is short description");
 			basicDetails.setDiscountPercent(.1f);
 			String filename = "tshirt" + (new Random().nextInt(3) + 1) + ".jpg";
-			File image = new File("src\\main\\resources\\static\\images\\product_basic_images\\tshirts\\" + filename);
-			basicDetails.setLogoImage(Files.readAllBytes(image.toPath()));
+			Resource image = new ClassPathResource("/static/images/product_basic_images/tshirts/" + filename);
+			basicDetails.setLogoImage(image.getInputStream().readAllBytes());
 
 			Product product = new Product();
 			product.setBarcode(Integer.toString(barcode));
@@ -162,8 +162,8 @@ public class WatmerchBackendApplication {
 		details.setBirthDate(new Date());
 		details.setCompany("Szczepionkowcy");
 		details.setNip("000999888");
-		File image = new File("src\\main\\resources\\static\\images\\users_basic_images\\admin.jpg");
-		details.setAvatar(Files.readAllBytes(image.toPath()));
+		Resource image = new ClassPathResource("/static/images/users_basic_images/admin.jpg");
+		details.setAvatar(image.getInputStream().readAllBytes());
 
 		Role role = new Role();
 		role.setId(3);
@@ -211,8 +211,8 @@ public class WatmerchBackendApplication {
 		details.setBirthDate(new Date());
 		details.setCompany("Koksy");
 		details.setNip("999999999");
-		File image = new File("src\\main\\resources\\static\\images\\users_basic_images\\employee.jpg");
-		details.setAvatar(Files.readAllBytes(image.toPath()));
+		Resource image = new ClassPathResource("/static/images/users_basic_images/employee.jpg");
+		details.setAvatar(image.getInputStream().readAllBytes());
 
 		Role role = new Role();
 		role.setId(2);
@@ -260,8 +260,8 @@ public class WatmerchBackendApplication {
 		details.setBirthDate(new Date());
 		details.setCompany("Ziomy");
 		details.setNip("123123123");
-		File image = new File("src\\main\\resources\\static\\images\\users_basic_images\\user.jpg");
-		details.setAvatar(Files.readAllBytes(image.toPath()));
+		Resource image = new ClassPathResource("/static/images/users_basic_images/user.jpg");
+		details.setAvatar(image.getInputStream().readAllBytes());
 
 		Role role = new Role();
 		role.setId(1);
