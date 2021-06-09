@@ -1,31 +1,30 @@
 package com.qsspy.watmerchbackend.controller.websocket;
 
 import com.qsspy.watmerchbackend.model.WebSocketMessageModel;
-import com.qsspy.watmerchbackend.service.ISupportBotService;
+import com.qsspy.watmerchbackend.service.IWebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @Slf4j
 public class WebSocketController {
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
-    private final ISupportBotService supportBotService;
+    private final IWebSocketService webSocketService;
 
-    public WebSocketController(SimpMessagingTemplate simpMessagingTemplate, ISupportBotService supportBotService) {
-        this.simpMessagingTemplate = simpMessagingTemplate;
-        this.supportBotService = supportBotService;
+    public WebSocketController(IWebSocketService supportBotService) {
+        this.webSocketService = supportBotService;
     }
 
     @MessageMapping("/support")
     public void reply(
             @Payload WebSocketMessageModel message) {
-        simpMessagingTemplate.convertAndSend("/queue/support-" + message.getSenderId(), message);
-        simpMessagingTemplate.convertAndSend("/queue/support-" + message.getSenderId(),
-                supportBotService.getBotAnswer(message.getMessage()));
+    }
+
+    @MessageMapping("/public")
+    public void registerToPublic(StompHeaderAccessor accessor) {
 
     }
 }
