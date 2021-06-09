@@ -1,0 +1,35 @@
+Adres do połączenia :
+
+ws://localhost:8081/notification
+
+Ciało wiadomości :
+{
+    name: "sender Name",
+    message: "message"
+}
+
+KANAL PUBLICZNY :
+
+    endpoint do subskrypcji :
+
+    /topic/public
+
+    Wystarczy subskrypcja, nic nie trzeba wysyłać
+
+    Co 30 sekund przychodzi fakt o Chucku Norrisie, model wiadomości jak powyżej
+
+KANAL PRYWATNY
+
+    endpoint do subskrypcji :
+
+    /user/queue/private
+
+    Po subskrypcji, aby otrzymywac wiadomosci nalezy wysłać model wiadomości z nazwa uzytkownika ("message" moze byc pusty) na endpoint :
+
+    /notification/openPrivateChannel
+
+    Aby przestac otrzymywac wiadomości wystarczy wyslac pusty model na endpoint :
+
+    /notification/closePrivateChannel
+
+    Wiadomość z cytatem z wiedzmina 3 przychodzi co 20 sekund, model wiadomości jak powyzej

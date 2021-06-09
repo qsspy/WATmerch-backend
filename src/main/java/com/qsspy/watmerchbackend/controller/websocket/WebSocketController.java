@@ -18,13 +18,13 @@ public class WebSocketController {
         this.webSocketService = supportBotService;
     }
 
-    @MessageMapping("/support")
-    public void reply(
-            @Payload WebSocketMessageModel message) {
+    @MessageMapping("/openPrivateChannel")
+    public void openPrivateChannel(StompHeaderAccessor accessor, @Payload WebSocketMessageModel message) {
+        webSocketService.addPrivateSubscriber(accessor.getSessionId(), message.getName());
     }
 
-    @MessageMapping("/public")
-    public void registerToPublic(StompHeaderAccessor accessor) {
-
+    @MessageMapping("/closePrivateChannel")
+    public void closePrivateChannel(StompHeaderAccessor accessor) {
+        webSocketService.removePrivateSubscriber(accessor.getSessionId());
     }
 }

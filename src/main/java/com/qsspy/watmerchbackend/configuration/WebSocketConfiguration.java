@@ -13,8 +13,8 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
 
-        registry.addEndpoint("/chat");
-        registry.addEndpoint("/chat")
+        registry.addEndpoint("/notification");
+        registry.addEndpoint("/notification")
                 .withSockJS();
 
     }
@@ -24,6 +24,6 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
         // setAllowedOrigins() - moze trzeba bedzie to ustawic gdy adresy apek beda sie roznic
         registry.enableSimpleBroker("/topic","/queue");
-        registry.setApplicationDestinationPrefixes("/chat");
+        registry.setApplicationDestinationPrefixes("/notification");
     }
 }

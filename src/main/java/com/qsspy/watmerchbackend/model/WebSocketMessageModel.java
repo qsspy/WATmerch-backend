@@ -1,29 +1,17 @@
 package com.qsspy.watmerchbackend.model;
 
 
-import java.util.UUID;
-
 public class WebSocketMessageModel {
 
-    private UUID senderId;
     private String name;
     private String message;
 
-    public WebSocketMessageModel(UUID senderId, String name, String message) {
-        this.senderId = senderId;
+    public WebSocketMessageModel(String name, String message) {
         this.name = name;
         this.message = message;
     }
 
     public WebSocketMessageModel(){}
-
-    public UUID getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(UUID senderId) {
-        this.senderId = senderId;
-    }
 
     public String getName() {
         return name;
