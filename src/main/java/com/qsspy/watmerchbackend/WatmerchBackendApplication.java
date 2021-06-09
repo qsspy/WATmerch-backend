@@ -23,7 +23,7 @@ public class WatmerchBackendApplication {
 
 		ApplicationContext app = SpringApplication.run(WatmerchBackendApplication.class, args);
 
-		//initializeData(app);
+		initializeData(app);
 	}
 
 	private static void initializeData(ApplicationContext app) throws IOException, RegisterException {
