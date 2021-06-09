@@ -1,6 +1,10 @@
 Adres do połączenia :
 
-ws://localhost:8081/notification
+ws://localhost:8080/notification
+
+lub
+
+ws://watmerch-backend.herokuapp.com/notification
 
 Ciało wiadomości :
 {
