@@ -11,95 +11,95 @@
 
     <script src="/js/userListForm.js"></script>
     <script>
-        function deleteAlert() {
+        function deleteAlert(id) {
             if (confirm("Jesteś pewny/a, że chcesz usunąć tego użytkownika?")) {
-                document.getElementById("deleteForm").submit()
+                document.getElementById("deleteForm" + id).submit()
             }
         }
     </script>
 </head>
 
 <body>
-    <div class="container">
-        <h1>
-            Panel Zarządzania użytkownikami
-        </h1>
+<div class="container">
+    <h1>
+        Panel Zarządzania użytkownikami
+    </h1>
 
-        <form th:action="@{/crm/users}" method="GET" id="mainForm">
-            <div class="d-flex align-items-center my-2">
-                <input th:value="${keyword}" type="text" class="form-control mr-2" id="searchUsername" placeholder="Username" name="keyword">
-                <select class="form-control mx-2" id="roleSelect" name="roleId">
-                    <option value="0"
-                            th:selected="${roleId} == 0">Wszystkie</option>
-                    <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name.name()}"
-                            th:selected="${roleId} == ${role.id}"></option>
-                </select>
-                <input type="hidden" id="pageSize" name="size" th:value="${size}">
-                <input type="hidden" id="pageNumber" name="page" th:value="${page}">
-                <button class="btn btn-primary ml-2" onclick="filter()">Filtruj</button>
-            </div>
-        </form>
-        <div th:if="${deleted}" class="alert alert-primary" role="alert">
-            Pomyślnie usunięto użytkownika!
+    <form th:action="@{/crm/users}" method="GET" id="mainForm">
+        <div class="d-flex align-items-center my-2">
+            <input th:value="${keyword}" type="text" class="form-control mr-2" id="searchUsername" placeholder="Username" name="keyword">
+            <select class="form-control mx-2" id="roleSelect" name="roleId">
+                <option value="0"
+                        th:selected="${roleId} == 0">Wszystkie</option>
+                <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name.name()}"
+                        th:selected="${roleId} == ${role.id}"></option>
+            </select>
+            <input type="hidden" id="pageSize" name="size" th:value="${size}">
+            <input type="hidden" id="pageNumber" name="page" th:value="${page}">
+            <button class="btn btn-primary ml-2" onclick="filter()">Filtruj</button>
         </div>
-        <table class="table table-striped table-bordered table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Nazwa</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Rola</th>
-                    <th scope="col">Akcje</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="user : ${users}">
-                    <th scope="row" th:text="${user.id}"></th>
-                    <td th:text="${user.username}"></td>
-                    <td th:text="${user.email}"></td>
-                    <td th:text="${user.role.name.name()}"></td>
-                    <td class="d-flex flex-wrap" >
-                        <a th:href="@{'/crm/userDetails/' + ${user.id}}" class="btn btn-success">Edytuj</a>
-                        <form th:action="@{'/crm/users/delete/' + ${user.id}}" method="POST" id="deleteForm">
-                            <a onclick="deleteAlert()" class="btn btn-danger" style="color: white">Usuń</a>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="d-flex justify-content-between">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    <li >
-                        <button class="page-link"
-                                th:onclick="'changePage(' + ${page - 1} + ')'"
-                                th:disabled="${page == 1}"><<</button>
-                    </li>
-                    <li th:if="${paginator.showFirstPage}" ><button class="page-link" onclick="changePage(1)">1</button></li>
-                    <li th:if="${paginator.showFirstPage}" ><button class="page-link disabled" disabled>...</button></li>
-                    <li th:each="page : ${paginator.pages}" >
-                        <button class="page-link" th:text="${page}" th:onclick="'changePage(' + ${page} + ')'"></button>
-                    </li>
-                    <li th:if="${paginator.showLastPage}" ><button class="page-link disabled" disabled>...</button></li>
-                    <li th:if="${paginator.showLastPage}" >
-                        <button class="page-link" th:text="${paginator.lastPage}" th:onclick="'changePage(' + ${paginator.lastPage} + ')'"></button>
-                    </li>
-                    <li><button class="page-link"
-                                th:onclick="'changePage(' + ${page + 1} + ')'"
-                                th:disabled="${page == paginator.lastPage}">>></button></li>
-                </ul>
-            </nav>
-            <nav aria-label="...">
-                <ul class="pagination pagination-sm">
-                  <li class="page-item"
-                      th:each="size : ${pageSizes}">
-                      <button class="page-link"
-                              th:text="${size}"
-                              th:onclick="'changeSize(' + ${size} + ')'"></button>
-                  </li>
-                </ul>
-            </nav>
-        </div>
+    </form>
+    <div th:if="${deleted}" class="alert alert-primary" role="alert">
+        Pomyślnie usunięto użytkownika!
     </div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nazwa</th>
+            <th scope="col">Email</th>
+            <th scope="col">Rola</th>
+            <th scope="col">Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td scope="row" th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.role.name.name()}"></td>
+            <td class="d-flex flex-wrap" >
+                <a th:href="@{'/crm/userDetails/' + ${user.id}}" class="btn btn-success">Edytuj</a>
+                <form th:action="@{'/crm/users/delete/' + ${user.id}}" method="POST" th:id="deleteForm + ${user.id}">
+                    <a th:onclick="'deleteAlert(' + ${user.id} + ')'" class="btn btn-danger" style="color: white">Usuń</a>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-between">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li >
+                    <button class="page-link"
+                            th:onclick="'changePage(' + ${page - 1} + ')'"
+                            th:disabled="${page == 1}"><<</button>
+                </li>
+                <li th:if="${paginator.showFirstPage}" ><button class="page-link" onclick="changePage(1)">1</button></li>
+                <li th:if="${paginator.showFirstPage}" ><button class="page-link disabled" disabled>...</button></li>
+                <li th:each="page : ${paginator.pages}" >
+                    <button class="page-link" th:text="${page}" th:onclick="'changePage(' + ${page} + ')'"></button>
+                </li>
+                <li th:if="${paginator.showLastPage}" ><button class="page-link disabled" disabled>...</button></li>
+                <li th:if="${paginator.showLastPage}" >
+                    <button class="page-link" th:text="${paginator.lastPage}" th:onclick="'changePage(' + ${paginator.lastPage} + ')'"></button>
+                </li>
+                <li><button class="page-link"
+                            th:onclick="'changePage(' + ${page + 1} + ')'"
+                            th:disabled="${page == paginator.lastPage}">>></button></li>
+            </ul>
+        </nav>
+        <nav aria-label="...">
+            <ul class="pagination pagination-sm">
+                <li class="page-item"
+                    th:each="size : ${pageSizes}">
+                    <button class="page-link"
+                            th:text="${size}"
+                            th:onclick="'changeSize(' + ${size} + ')'"></button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
 </body>
 </html>
