@@ -17,8 +17,8 @@ import java.util.Random;
 @Service
 public class ProductService implements IProductService {
 
-    private CategoryRepository categoryRepository;
-    private ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
     public ProductService(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
@@ -71,6 +71,10 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getRandomProducts(int productCount, Boolean extended, Boolean detailed) {
+
+        if(productCount<1) {
+            throw new IllegalArgumentException("Product count can't be less than 1");
+        }
 
         List<String> barcodes = productRepository.getBarcodes();
 

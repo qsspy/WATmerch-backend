@@ -21,20 +21,22 @@ public class CreditCardService implements ICreditCardService{
     }
 
     @Override
-    public CreditCard postCreditCard(CreditCard creditCard, String authString) {
+    public CreditCard postCreditCard(CreditCard creditCard, String authString){
 
         String username = UserAndPasswordModel.basicAuthBase64Decode(authString).getUsername();
         ShopUser user = userRepository.findByUsername(username);
+
         creditCard.setUser(user);
 
         return creditCardRepository.save(creditCard);
     }
 
     @Override
-    public List<CreditCard> getCreditCards(String authString) {
+    public List<CreditCard> getCreditCards(String authString){
 
         String username = UserAndPasswordModel.basicAuthBase64Decode(authString).getUsername();
         ShopUser user = userRepository.findByUsername(username);
+
         return creditCardRepository.findByUser(user);
     }
 

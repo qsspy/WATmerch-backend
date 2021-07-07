@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class CRMService implements ICRMService{
 
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     public CRMService(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
@@ -58,6 +58,6 @@ public class CRMService implements ICRMService{
 
     @Override
     public List<Integer> getPageSizes() {
-        return new ArrayList<>(Arrays.asList(10,20,50));
+        return Arrays.asList(10,20,50);
     }
 }
