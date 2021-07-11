@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public PasswordEncoder encoder() {
@@ -41,6 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/css/**", "/images/**", "/js/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/hello").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/register").permitAll() //register
                 .antMatchers(HttpMethod.POST, "/api/loginUser").permitAll() //try to login
                 .antMatchers(HttpMethod.POST, "/api/buy").permitAll() //buy items

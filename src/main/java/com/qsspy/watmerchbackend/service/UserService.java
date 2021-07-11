@@ -28,7 +28,7 @@ import java.util.Map;
 
 @Service
 @Transactional
-public class UserService implements IUserService{
+public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -47,27 +47,27 @@ public class UserService implements IUserService{
     public Page<ShopUser> getUsers(int page, int size, String keyword, int roleId) {
 
         Sort sort = Sort.by(Sort.Direction.ASC, "username");
-        Pageable pageable = PageRequest.of(page,size,sort);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-        if(roleId == 0) {
-            return userRepository.findByUsernameContaining(keyword,pageable);
+        if (roleId == 0) {
+            return userRepository.findByUsernameContaining(keyword, pageable);
         }
 
         return userRepository.findByRoleIdAndUsernameContaining(roleId, keyword, pageable);
     }
 
     @Override
-    public ShopUser register(ShopUser user) throws RegisterException{
+    public ShopUser register(ShopUser user) throws RegisterException {
 
-        if(userRepository.findByUsername(user.getUsername()) != null) {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
             throw new UserExistsException("User " + user.getUsername() + " already exists!");
         }
-        if(userRepository.findByEmail(user.getEmail()) != null) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new EmailNotAvailableException("E-mail " + user.getEmail() + " is already taken!");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if(user.getRole() == null) {
+        if (user.getRole() == null) {
             Role basicRole = new Role();
             basicRole.setId(1);
             basicRole.setName(Role.RoleType.USER);
@@ -82,9 +82,9 @@ public class UserService implements IUserService{
 
         ShopUser user = userRepository.findByUsername(username);
 
-        if(user == null) {
+        if (user == null) {
             throw new UserNotFoundException(username + " not found.");
-        } else if(!passwordEncoder.matches(password, user.getPassword())) {
+        } else if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new WrongPasswordException("Invalid password.");
         }
 
@@ -116,7 +116,7 @@ public class UserService implements IUserService{
         UserAndPasswordModel userCreds = UserAndPasswordModel.basicAuthBase64Decode(authString);
 
         ShopUser user = userRepository.findByUsername(userCreds.getUsername());
-        if(isAddressShipping) {
+        if (isAddressShipping) {
             address.setId(user.getShippingAddress().getId());
         } else {
             address.setId(user.getBillingAddress().getId());
@@ -126,7 +126,7 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public ShopUser editUser(Map<String,String> params, long id) throws JsonProcessingException {
+    public ShopUser editUser(Map<String, String> params, long id) throws JsonProcessingException {
 
         ShopUser oldUser = userRepository.findById(id).get();
         Map<String, Object> nestedMap = generateNestedMap(params, "\\.", ".");
@@ -145,27 +145,27 @@ public class UserService implements IUserService{
         userRepository.deleteById(id);
     }
 
-    private Map<String, Object>generateNestedMap(Map<String, String> map, String separatorRegex, String separator) {
+    private Map<String, Object> generateNestedMap(Map<String, String> map, String separatorRegex, String separator) {
 
-        Map<String,Map<String, String>> nestedMaps = new HashMap<>();
+        Map<String, Map<String, String>> nestedMaps = new HashMap<>();
         Map<String, Object> outMap = new HashMap<>();
 
-        for(String key: map.keySet()) {
+        for (String key : map.keySet()) {
 
-            if(key.contains(separator)) {
+            if (key.contains(separator)) {
 
-                String[] parts = key.split(separatorRegex,2);
-                if(!nestedMaps.containsKey(parts[0])) {
+                String[] parts = key.split(separatorRegex, 2);
+                if (!nestedMaps.containsKey(parts[0])) {
                     nestedMaps.put(parts[0], new HashMap());
                 }
-                nestedMaps.get(parts[0]).put(parts[1],map.get(key));
+                nestedMaps.get(parts[0]).put(parts[1], map.get(key));
             } else {
                 outMap.put(key, map.get(key));
             }
         }
 
-        for(String nestedKey : nestedMaps.keySet()) {
-            outMap.put(nestedKey,generateNestedMap(nestedMaps.get(nestedKey),separatorRegex, separator));
+        for (String nestedKey : nestedMaps.keySet()) {
+            outMap.put(nestedKey, generateNestedMap(nestedMaps.get(nestedKey), separatorRegex, separator));
         }
 
         return outMap;
