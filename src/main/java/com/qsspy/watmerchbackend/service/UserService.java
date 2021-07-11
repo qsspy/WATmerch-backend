@@ -21,17 +21,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Transactional
 public class UserService implements IUserService{
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private UserDetailsRepository userDetailsRepository;
-    private AddressRepository addressRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserDetailsRepository userDetailsRepository;
+    private final AddressRepository addressRepository;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDetailsRepository userDetailsRepository, AddressRepository addressRepository) {
         this.userRepository = userRepository;
@@ -41,6 +43,7 @@ public class UserService implements IUserService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ShopUser> getUsers(int page, int size, String keyword, int roleId) {
 
         Sort sort = Sort.by(Sort.Direction.ASC, "username");
@@ -74,6 +77,7 @@ public class UserService implements IUserService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ShopUser getUser(String username, String password) throws UserNotFoundException, WrongPasswordException {
 
         ShopUser user = userRepository.findByUsername(username);
@@ -90,6 +94,7 @@ public class UserService implements IUserService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ShopUser getUser(long id) {
         return userRepository.findById(id).get();
     }

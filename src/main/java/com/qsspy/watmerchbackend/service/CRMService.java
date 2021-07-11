@@ -4,12 +4,14 @@ import com.qsspy.watmerchbackend.entity.Role;
 import com.qsspy.watmerchbackend.model.PaginatorModel;
 import com.qsspy.watmerchbackend.repository.RoleRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Transactional
 public class CRMService implements ICRMService{
 
     private final RoleRepository roleRepository;
@@ -19,6 +21,7 @@ public class CRMService implements ICRMService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Role> getRoles() {
         return roleRepository.findAll();
     }

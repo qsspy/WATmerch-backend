@@ -13,8 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class PurchaseService implements IPurchaseService {
 
     private final PurchaseRepository purchaseRepository;
@@ -48,6 +50,7 @@ public class PurchaseService implements IPurchaseService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Purchase> getPurchases(String authString, Integer pageSize, Integer pageNumber) {
 
         Sort sort = Sort.by(Sort.Direction.DESC,"purchaseDate");

@@ -9,12 +9,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 @Service
+@Transactional
 public class ProductService implements IProductService {
 
     private final CategoryRepository categoryRepository;
@@ -26,6 +28,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Category> getCategories() {
 
         return categoryRepository.findAll();
@@ -37,6 +40,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Product> getProducts(int page, int size, Integer categoryId, Boolean extended, Boolean detailed, String namePart) {
 
         Sort sort = Sort.by(Sort.Direction.ASC, "name");
@@ -59,6 +63,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Product getProduct(String barcode) {
         return productRepository.findById(barcode).get();
     }
@@ -70,6 +75,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> getRandomProducts(int productCount, Boolean extended, Boolean detailed) {
 
         if(productCount<1) {
